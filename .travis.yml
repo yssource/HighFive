@@ -7,40 +7,40 @@
 sudo: required
 language: cpp
 
-addons: &gcc7
-  apt:
-    packages:
-      - g++-7
-      - libboost-all-dev
-      - libhdf5-serial-dev
-      - libeigen3-dev
-      - ninja-build
-    sources:
-      - ubuntu-toolchain-r-test
+# addons: &gcc7
+#   apt:
+#     packages:
+#       - g++-7
+#       - libboost-all-dev
+#       - libhdf5-serial-dev
+#       - libeigen3-dev
+#       - ninja-build
+#     sources:
+#       - ubuntu-toolchain-r-test
 
-addons: &clang6
-  apt:
-    packages:
-      - clang-6.0
-      - libboost-all-dev
-      - libhdf5-serial-dev
-      - libeigen3-dev
-      - ninja-build
-    sources:
-      - ubuntu-toolchain-r-test
-      - llvm-toolchain-xenial-6.0
+# addons: &clang6
+#   apt:
+#     packages:
+#       - clang-6.0
+#       - libboost-all-dev
+#       - libhdf5-serial-dev
+#       - libeigen3-dev
+#       - ninja-build
+#     sources:
+#       - ubuntu-toolchain-r-test
+#       - llvm-toolchain-xenial-6.0
 
-addons: &clang7
-  apt:
-    packages:
-      - clang-7
-      - libboost-all-dev
-      - libhdf5-serial-dev
-      - libeigen3-dev
-      - ninja-build
-    sources:
-      - ubuntu-toolchain-r-test
-      - llvm-toolchain-xenial-7
+# addons: &clang7
+#   apt:
+#     packages:
+#       - clang-7
+#       - libboost-all-dev
+#       - libhdf5-serial-dev
+#       - libeigen3-dev
+#       - ninja-build
+#     sources:
+#       - ubuntu-toolchain-r-test
+#       - llvm-toolchain-xenial-7
 
 matrix:
   include:
@@ -98,7 +98,7 @@ install:
       MINCONDA_OS=$MINCONDA_LINUX;
     elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       # Manually install to allow no_auto_update
-      HOMEBREW_NO_AUTO_UPDATE=1 brew install boost hdf5 eigen ninja
+      HOMEBREW_NO_AUTO_UPDATE=1 brew install boost hdf5 eigen ninja;
       MINCONDA_OS=$MINCONDA_OSX;
     fi
 
