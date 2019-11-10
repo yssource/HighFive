@@ -56,14 +56,10 @@ inline hid_t convert_plist_type(PropertyType propertyType) {
 
 }  // namespace
 
-template <PropertyType T>
-inline PropertyList<T>::PropertyList()
-    : _hid(H5P_DEFAULT) {}
-
 #ifdef H5_USE_CXX11
 template <PropertyType T>
 inline PropertyList<T>::PropertyList(PropertyList<T>&& other)
-    : _hid(other._hid) {
+    : _hid(other._hid), propAdded(std::move(other.propAdded)) {
     other._hid = H5P_DEFAULT;
 }
 
@@ -73,6 +69,7 @@ inline PropertyList<T>& PropertyList<T>::operator=(PropertyList<T>&& other) {
     const auto hid = other._hid;
     other._hid = H5P_DEFAULT;
     _hid = hid;
+    propAdded = std::move(other.propAdded);
     return *this;
 }
 #endif
@@ -101,6 +98,7 @@ template <typename P>
 inline void PropertyList<T>::add(const P& property) {
     _initializeIfNeeded();
     property.apply(_hid);
+    propAdded.push_back(property.kind);
 }
 
 template <PropertyType T>

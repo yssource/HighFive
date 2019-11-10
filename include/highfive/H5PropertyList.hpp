@@ -16,6 +16,13 @@
 
 namespace HighFive {
 
+enum class PropKind : int {
+    CHUNKING = 0,
+    DEFLATE  = 1,
+    SHUFFLE  = 2,
+    CACHING  = 3,
+};
+
 ///
 /// \brief Types of property lists
 ///
@@ -53,7 +60,7 @@ class PropertyList {
 
     hid_t getId() const { return _hid; }
 
-    PropertyList();
+    PropertyList() = default;
 
     template <typename P>
     PropertyList(std::initializer_list<P>);
@@ -66,10 +73,13 @@ class PropertyList {
     template <typename P>
     void add(const P& property);
 
+    bool hasKind(PropKind kind) const {
+        return std::find(propAdded.begin(), propAdded.end(), kind) != propAdded.end();
+    }
   protected:
     void _initializeIfNeeded();
 
-    hid_t _hid;
+    hid_t _hid = H5P_DEFAULT;
 
   private:
 #ifdef H5_USE_CXX11
@@ -79,6 +89,8 @@ class PropertyList {
     PropertyList(const PropertyList<T>&);
     PropertyList& operator=(const PropertyList<T>&);
 #endif
+
+    std::vector<PropKind> propAdded;
 };
 
 typedef PropertyList<PropertyType::FILE_CREATE> FileCreateProps;
@@ -88,7 +100,7 @@ typedef PropertyList<PropertyType::DATASET_ACCESS> DataSetAccessProps;
 typedef PropertyList<PropertyType::DATASET_XFER> DataTransferProps;
 
 ///
-/// RawPropertieLists are to be used when advanced H5 properties
+/// RawPropertyLists are to be used when advanced H5 properties
 /// are desired and are not part of the HighFive API.
 /// Therefore this class is mainly for internal use.
 template <PropertyType T>
@@ -116,6 +128,7 @@ class Chunking {
   private:
     friend DataSetCreateProps;
     void apply(hid_t hid) const;
+    PropKind kind = PropKind::CHUNKING;
     const std::vector<hsize_t> _dims;
 };
 
@@ -127,6 +140,7 @@ class Deflate {
   private:
     friend DataSetCreateProps;
     void apply(hid_t hid) const;
+    PropKind kind = PropKind::DEFLATE;
     const unsigned _level;
 };
 
@@ -137,6 +151,7 @@ class Shuffle {
   private:
     friend DataSetCreateProps;
     void apply(hid_t hid) const;
+    PropKind kind = PropKind::SHUFFLE;
 };
 
 /// Dataset access property to control chunk cache configuration.
@@ -155,6 +170,7 @@ class Caching {
   private:
     friend DataSetAccessProps;
     void apply(hid_t hid) const;
+    PropKind kind = PropKind::CACHING;
     const size_t _numSlots;
     const size_t _cacheSize;
     const double _w0;

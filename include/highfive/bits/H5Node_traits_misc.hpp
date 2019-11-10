@@ -35,6 +35,14 @@ NodeTraits<Derivate>::createDataSet(const std::string& dataset_name,
                                     const DataSetCreateProps& createProps,
                                     const DataSetAccessProps& accessProps) {
     DataSet set;
+
+    bool chunkNeeded = space.getDimensions() != space.getMaxDimensions();
+    chunkNeeded |= createProps.hasKind(PropKind::SHUFFLE);
+
+    if (chunkNeeded && !createProps.hasKind(PropKind::CHUNKING)) {
+        HDF5ErrMapper::ToException<DataSetException>(std::string("Chunk is NEEDED!"));
+    }
+
     if ((set._hid = H5Dcreate2(static_cast<Derivate*>(this)->getId(),
                                dataset_name.c_str(), dtype._hid, space._hid,
                                H5P_DEFAULT, createProps.getId(),

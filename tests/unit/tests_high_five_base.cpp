@@ -236,6 +236,15 @@ BOOST_AUTO_TEST_CASE(HighFiveExtensibleDataSet) {
     constexpr double t1[3][1] = {{2.0}, {2.0}, {4.0}};
     constexpr double t2[1][3] = {{4.0, 8.0, 6.0}};
 
+    { // Try to create an ExtensibleDataSet without chunking
+        File file(FILE_NAME, File::ReadWrite | File::Create | File::Truncate);
+
+        DataSpace dataspace = DataSpace({4, 5}, {17, DataSpace::UNLIMITED});
+
+        BOOST_CHECK_THROW(file.createDataSet(DATASET_NAME, dataspace, AtomicType<double>()),
+                          DataSetException);
+    }
+
     {
         // Create a new file using the default property lists.
         File file(FILE_NAME, File::ReadWrite | File::Create | File::Truncate);
