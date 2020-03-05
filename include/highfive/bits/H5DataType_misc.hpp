@@ -415,7 +415,8 @@ inline DataType create_and_check_datatype() {
     // expecting.
     if (sizeof(T) != t.getSize()) {
         std::ostringstream ss;
-        ss << "Size of array type " << sizeof(T)
+        ss << "For type '" << t.string() 
+           << "': '" << typeid(T).name() << "' size of array type " << sizeof(T)
            << " != that of memory datatype " << t.getSize()
            << std::endl;
         throw DataTypeException(ss.str());
