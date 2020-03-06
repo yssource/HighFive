@@ -401,6 +401,7 @@ inline DataType create_datatype() {
     return AtomicType<T>();
 }
 
+#define NAME(T) #T
 
 /// \brief Create a DataType instance representing type T and perform a sanity check on its size
 template <typename T>
@@ -415,9 +416,8 @@ inline DataType create_and_check_datatype() {
     // expecting.
     if (sizeof(T) != t.getSize()) {
         std::ostringstream ss;
-        ss << "For type '" << t.string() 
-           << "': '" << typeid(T).name() << "' size of array type " << sizeof(T)
-           << " != that of memory datatype " << t.getSize()
+        ss << "Size of '" << t.string() << "' (" << t.getSize() << " bytes) does not match "
+           << "type '" << NAME(T) << "' size (" << sizeof(T)
            << std::endl;
         throw DataTypeException(ss.str());
     }
