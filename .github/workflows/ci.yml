@@ -92,6 +92,10 @@ jobs:
     - name: "Install libraries"
       run: sudo apt-get update && sudo apt-get install libhdf5-dev
 
+    - name: "Uninstall libraries"
+      run: sudo apt-get purge libboost-all-dev libboost-dev
+
+
 
     - name: Build
       run: |
