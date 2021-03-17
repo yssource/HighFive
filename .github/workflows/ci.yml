@@ -91,6 +91,7 @@ jobs:
 
     - name: Build
       run: |
+          mkdir BUILD && cd BUILD
           cmake -DHIGHFIVE_USE_BOOST=OFF ..
           cmake --build .
 
