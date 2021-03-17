@@ -81,6 +81,18 @@ jobs:
       working-directory: ${{github.workspace}}/build
       run: ctest --output-on-failure -C $BUILD_TYPE
 
+  # Plan for testing last cmake without boost
+  # =========================================
+  Linux_CMAKE:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build
+      run: |
+          cmake -DHIGHFIVE_USE_BOOST=OFF ..
+          cmake --build .
 
   # Plan for testing in OSX
   # =======================
